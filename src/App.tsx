@@ -20,11 +20,16 @@ function App() {
     }
 
     const addTask = (title: string) => {
-        if (title !== '') {
-        setTasks([{id: v1(), title: title, isDone: false}, ...tasks])}
+        if (title) {
+            setTasks([{id: v1(), title: title, isDone: false}, ...tasks])
+        }
     }
 
-    const [filter, setFilter] = useState('all')
+    const changeTaskStatus = (taskId: string, isDone: boolean) => {
+        setTasks(tasks.map(el => el.id === taskId ? {...el, isDone: isDone} : el))
+    }
+
+    const [filter, setFilter] = useState<FilterType>('all')
 
     const filterFn = (filterName: FilterType) => {
         setFilter(filterName)
@@ -36,7 +41,7 @@ function App() {
             tasksForRender = tasks.filter((el: TasksType) => el.isDone)
             break
         case 'active':
-            tasksForRender = tasks.filter((el:TasksType) => !el.isDone)
+            tasksForRender = tasks.filter((el: TasksType) => !el.isDone)
             break
         default:
             tasksForRender = tasks
@@ -50,7 +55,9 @@ function App() {
                 tasks={tasksForRender}
                 removeTask={removeTask}
                 filter={filterFn}
-                add={addTask}/>
+                add={addTask}
+                changeStatus={changeTaskStatus}
+                filterValue={filter}/>
             {/*<Todolist title='another title' tasks={tasks2} removeTask={removeTask}/>*/}
         </div>
     );
